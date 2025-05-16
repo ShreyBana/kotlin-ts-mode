@@ -181,6 +181,7 @@ and END mark the region to be fontified.  OVERRIDE is the override flag."
         "try"
         "when"
         "while"
+        "::"
         ] @font-lock-keyword-face
 
        ["!is" "!in"] @kotlin-ts-mode--fontify-not-is
@@ -217,7 +218,7 @@ and END mark the region to be fontified.  OVERRIDE is the override flag."
 
      :language 'kotlin
      :feature 'number
-     '([(integer_literal) (long_literal) (hex_literal) (bin_literal) (unsigned_literal) (real_literal)] @font-lock-number-face)
+     '([(integer_literal) (long_literal) (hex_literal) (bin_literal) (unsigned_literal) (real_literal)] @font-lock-constant-face)
 
      :language 'kotlin
      :feature 'type
@@ -345,10 +346,16 @@ and END mark the region to be fontified.  OVERRIDE is the override flag."
      :feature 'variable
      '((import_header (identifier (simple_identifier) @font-lock-constant-face
                                   (:match "^[A-Z_][A-Z_0-9]*$" @font-lock-constant-face)))
+       (import_header (identifier (simple_identifier) @font-lock-constant-face
+                                  (:match "^[a-z]" @font-lock-constant-face)))
        (import_header (identifier (simple_identifier) @font-lock-type-face
-                                  (:match "^[A-Z]" @font-lock-type-face)))))))
-       ;; (simple_identifier) @font-lock-variable-name-face
-       ;; (interpolated_identifier) @font-lock-variable-name-face
+                                  (:match "^[A-Z]" @font-lock-type-face)))
+       (package_header (identifier (simple_identifier) @font-lock-constant-face
+                                  (:match "^[a-z]" @font-lock-constant-face))))
+
+     :language 'kotlin
+     :feature 'annotation
+     '((jump_expression "return@") @font-lock-constant-face))))
 
 (defconst kotlin-ts-mode--treesit-indent-rules
   '((kotlin
